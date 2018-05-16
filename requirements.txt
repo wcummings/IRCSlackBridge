@@ -1,0 +1,3 @@
+twisted
+git+https://github.com/micolous/python-slackrealtime.git#egg=slackrealtime
+
