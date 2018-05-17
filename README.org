@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 ** Setup
 
-SlackIRCBridge creates a single RTM connection to Slack, and once it's
+IRCSlackBridge creates a single RTM connection to Slack, and once it's
 connected opens an unauthenticated IRC server on localhost:6667. It
 will accept multiple IRC connections, but they will all "connect" to
 the same Slack session. If the Slack connection drops, the bridge
