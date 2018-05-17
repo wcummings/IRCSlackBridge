@@ -1,0 +1,20 @@
+* SlackIRCBridge
+
+** Installation
+
+Standard python bs:
+
+#+begin_src sh
+pip install -r requirements.txt
+#+end_src
+
+** Setup
+
+SlackIRCBridge creates a single RTM connection to Slack, and once it's
+connected opens an unauthenticated IRC server on localhost:6667. It
+will accept multiple IRC connections, but they will all "connect" to
+the same Slack session. If the Slack connection drops, the bridge
+should die and be restarted (by supervisord or w/e).
+
+Generate a key for your account on the [[https://api.slack.com/custom-integrations/legacy-tokens][legacy tokens]] page, then put it
+into the SLACK_API_TOKEN environment variable and you're good to go.

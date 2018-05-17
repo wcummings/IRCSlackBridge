@@ -16,7 +16,7 @@ class IRCUser(irc.IRC):
 
     def irc_NICK(self, prefix, params):
         self.nick = params[0]
-        self.sendMessage(irc.RPL_WELCOME, params[0], ":Welcome to the Internet Relay Network %s" % params[0])
+        self.sendMessage(irc.RPL_WELCOME, params[0], ":Welcome to the Internet Relay Network %s" % self.nick)
 
     def irc_PRIVMSG(self, prefix, params):
         channel = params[0].replace("#", "")
