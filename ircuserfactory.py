@@ -5,8 +5,9 @@ from twisted.internet.protocol import Factory
 class IRCUserFactory(Factory):
     protocol = IRCUser
 
-    def __init__(self):
+    def __init__(self, slackProtocol):
         self.connections = []
+        self.slackProtocol = slackProtocol
 
     def sendMessage(self, sender, recipient, text):
         for connection in self.connections:

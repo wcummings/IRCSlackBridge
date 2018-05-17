@@ -20,7 +20,8 @@ class IRCUser(irc.IRC):
     def irc_PRIVMSG(self, prefix, params):
         channel = params[0].replace("#", "")
         text = params[1]
-
+        self.factory.slackProtocol.sendChatMessage(text, channel=channel)
+        
     # TODO
     def irc_JOIN(self, prefix, params):
         self.sendMessage(irc.RPL_TOPIC, ":")
