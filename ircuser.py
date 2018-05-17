@@ -15,6 +15,7 @@ class IRCUser(irc.IRC):
         self.sendCommand(irc.ERR_UNKNOWNCOMMAND, (command, ":Unknown command"))
 
     def irc_NICK(self, prefix, params):
+        self.nick = params[0]
         self.sendMessage(irc.RPL_WELCOME, params[0], ":Welcome to the Internet Relay Network %s" % params[0])
 
     def irc_PRIVMSG(self, prefix, params):
@@ -22,9 +23,12 @@ class IRCUser(irc.IRC):
         text = params[1]
         self.factory.slackProtocol.sendChatMessage(text, channel=channel)
         
-    # TODO
     def irc_JOIN(self, prefix, params):
-        self.sendMessage(irc.RPL_TOPIC, ":")
+        for channel in self.factory.slackProtocol.meta.channels.values():
+            if channel['name'] == params[0].replace("#", ""):
+                topic = channel['topic']['value']
+                self.topic(self.nick, '#' + channel['name'], topic)
+                return
     
     def irc_PING(self, prefix, params):
         self.sendLine("PONG %s" % params[-1])        

@@ -10,7 +10,6 @@ class SlackProtocol(RtmProtocol):
         return self
 
     def onOpen(self):
-        self.factory.connection = self
         print "Connected to Slack"
         self.ircfactory = IRCUserFactory(self)
         endpoint = TCP4ServerEndpoint(reactor, 6667)
