@@ -11,12 +11,16 @@ class IRCUser(irc.IRC):
         self.factory.connections.remove(self)
         
     def irc_unknown(self, prefix, command, params):
-        print "Unknown command: %s" % command
+        print "Unknown command: %s (%s)" % (command, params)
         self.sendCommand(irc.ERR_UNKNOWNCOMMAND, (command, ":Unknown command"))
 
     def irc_NICK(self, prefix, params):
+        import json
         self.nick = params[0]
-        self.sendMessage(irc.RPL_WELCOME, params[0], ":Welcome to the Internet Relay Network %s" % self.nick)
+        self.sendMessage(irc.RPL_WELCOME, self.nick, ":Welcome to the Internet Relay Network %s" % self.nick)
+        self.sendMessage(irc.RPL_YOURHOST, ":Your host is IRCSlackBridge, running version alpha")
+        self.sendMessage(irc.RPL_CREATED, ":This server always was created on %s" % self.factory.creationTime)
+        self.sendMessage(irc.RPL_MYINFO, ":IRCSlackBridge alpha w n")
 
     def irc_PRIVMSG(self, prefix, params):
         channel = params[0].replace("#", "")
