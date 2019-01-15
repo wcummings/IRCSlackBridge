@@ -1,6 +1,6 @@
 * IRCSlackBridge
 
-# WORK IN PROGRESS
+* WORK IN PROGRESS
 
 ** Installation
 
