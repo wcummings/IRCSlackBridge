@@ -1,5 +1,7 @@
 * IRCSlackBridge
 
+# WORK IN PROGRESS
+
 ** Installation
 
 Standard python bs:
