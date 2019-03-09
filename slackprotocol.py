@@ -1,19 +1,18 @@
 from slackrealtime import RtmProtocol
 from slackrealtime.event import Message
-from ircuserfactory import IRCUserFactory
-from twisted.internet.endpoints import TCP4ServerEndpoint
+from slackrealtime import connect
+
 from twisted.internet import reactor
+
 
 class SlackProtocol(RtmProtocol):
 
-    def init(self):
+    def init(self, ircUser):
+        self._ircUser = ircUser
         return self
 
     def onOpen(self):
         print "Connected to Slack"
-        self.ircfactory = IRCUserFactory(self)
-        endpoint = TCP4ServerEndpoint(reactor, 6667)
-        endpoint.listen(self.ircfactory)
 
     def onSlackEvent(self, event):
         if not isinstance(event, Message):
@@ -27,4 +26,4 @@ class SlackProtocol(RtmProtocol):
 
         print "SLACK MESSAGE: (#%s) %s: %s" % (channel['name'], user['name'], event.text)
 
-        self.ircfactory.sendMessage(user['name'], "#%s" % channel['name'], event.text)
+        self.ircUser.sendCommand('PRIVMSG', (channel['name'], event.text), user['name'])

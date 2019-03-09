@@ -1,21 +1,28 @@
 from twisted.words.protocols import irc
 
+from slackrealtime.factory import DyingWebSocketClientFactory
+from slackrealtime import connect
+
+from slackprotocol import SlackProtocol
+
+
 class IRCUser(irc.IRC):
+
+    def __init__(self, slack_api_token):
+        self._slack_api_token = slack_api_token
+        super(IRCUser, self).__init__()
 
     def connectionMade(self):
         irc.IRC.connectionMade(self)
-        self.factory.connections.append(self)
-
-    def connectionLost(self, reason):
-        irc.IRC.connectionLost(self, reason)        
-        self.factory.connections.remove(self)
+        self._slack_connection = connect(self._slack_api_token,
+                                         protocol=lambda *a,**k: SlackProtocol(*a,**k).init(self),
+                                         factory=DyingWebSocketClientFactory)
         
     def irc_unknown(self, prefix, command, params):
         print "Unknown command: %s (%s)" % (command, params)
         self.sendCommand(irc.ERR_UNKNOWNCOMMAND, (command, ":Unknown command"))
 
     def irc_NICK(self, prefix, params):
-        import json
         self.nick = params[0]
         self.sendMessage(irc.RPL_WELCOME, self.nick, ":Welcome to the Internet Relay Network %s" % self.nick)
         self.sendMessage(irc.RPL_YOURHOST, ":Your host is IRCSlackBridge, running version alpha")

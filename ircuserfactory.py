@@ -7,11 +7,8 @@ from twisted.internet.protocol import Factory
 class IRCUserFactory(Factory):
     protocol = IRCUser
 
-    def __init__(self, slackProtocol):
-        self.connections = []
-        self.slackProtocol = slackProtocol
-        self.creationTime = time.ctime()
+    def __init__(self, slack_api_token):
+        self._slack_api_token = slack_api_token
 
-    def sendMessage(self, sender, recipient, text):
-        for connection in self.connections:
-            connection.sendCommand("PRIVMSG", (recipient, text), sender)
+    def buildProtocol(self, addr):
+        return IRCUser(self._slack_api_token)
